@@ -28,6 +28,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn import preprocessing
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 def preprocess_data(df):
     '''
@@ -235,8 +236,16 @@ print("processed content is :")
 print processed_content
 
 #vectorize Content
-count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
-X = count_vectorizer.fit_transform(processed_content)
+#choose one of the below
+
+#CountVectorizer (BOW)
+# count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
+# X = count_vectorizer.fit_transform(processed_content)
+
+#TfIdfVectorizer
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(processed_content)
+
 # print("X is:")
 # print X
 
