@@ -4,12 +4,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd  # this is how I usually import pandas
 import sys  # only needed to determine Python version number
-import matplotlib  # only needed to determine Matplotlib version number
-import nltk
-from nltk import word_tokenize
-import csv
 from string import punctuation
 import re
+import nltk
 from nltk.stem import StemmerI, RegexpStemmer, LancasterStemmer, ISRIStemmer, PorterStemmer, SnowballStemmer, RSLPStemmer
 from nltk import word_tokenize
 # nltk.download(u'stopwords')
@@ -21,7 +18,7 @@ from nltk.corpus import stopwords
 # Enable inline plotting
 # %matplotlib inline
 
-#for classification
+# For classification
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
@@ -29,6 +26,8 @@ from sklearn.metrics import classification_report
 from sklearn import preprocessing
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn import svm
+from sklearn.model_selection import train_test_split, GridSearchCV
 
 def preprocess_data(df):
     '''
@@ -147,7 +146,7 @@ def replace_emojis(text):
 def preprocess(df):
     """
     Process the data
-    
+
     :param df:
     :return: 
     """
@@ -161,10 +160,10 @@ def preprocess(df):
         processed_text = text.lower()
 
         # Remove urls
-        processed_text = re.sub(r"(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\."
-                                r"[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?", '', processed_text)
+        processed_text = re.sub(r'(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)'
+                                r'*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?', '', processed_text)
 
-        # Remove hastags
+        # Remove hashtags
         processed_text = re.sub(r"\B#\w\w+", '', processed_text)
 
         # Remove tags
@@ -173,7 +172,7 @@ def preprocess(df):
         # Replace emojis with tags
         processed_text = replace_emojis(processed_text)
 
-        # Rreplace hahas
+        # Replace hahas
         processed_text = re.sub('hahaha+', '', processed_text)
         processed_text = re.sub('haha+', '', processed_text)
 
@@ -196,36 +195,33 @@ def preprocess(df):
         for token in filtered[1:]:
             processed_text = processed_text + ' ' + token
 
-        #print(processed_text)
+        # print(processed_text)
         ret += [(index, processed_text)]
         # print(df.loc[[index]])
         # break
-    return  ret
+    return ret
 
 
 # Read the data
 Location = r'../twitter_data/myTrain.tsv'
-df = pd.read_csv(Location, sep='\t', names=['ID_1','ID_2', 'Label', 'Text'])
+df = pd.read_csv(Location, sep='\t', names=['ID_1', 'ID_2', 'Label', 'Text'])
 
 print("df is:")
-print df;
+print(df)
 
 # Preprocess the data
-processed_list =  preprocess(df)
+processed_list = preprocess(df)
 
 print("processed list is:")
-print processed_list
-
-# for item in processed_list:
-#     print(item)
+print(processed_list)
 
 # Do the classification
 
-#build label encoder for categories
+# Build label encoder for categories
 le = preprocessing.LabelEncoder()
 le.fit(df["Label"])
 
-#transform categories into numbers
+# Transform categories into numbers
 y = le.transform(df["Label"])
 
 # print("after labeling is:")
@@ -233,16 +229,16 @@ y = le.transform(df["Label"])
 
 processed_content = [item[1] for item in processed_list]
 print("processed content is :")
-print processed_content
+print(processed_content)
 
-#vectorize Content
-#choose one of the below
+# Vectorize Content
+# Choose one of the below
 
-#CountVectorizer (BOW)
+# CountVectorizer (BOW)
 # count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
 # X = count_vectorizer.fit_transform(processed_content)
 
-#TfIdfVectorizer
+# TfIdfVectorizer
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(processed_content)
 
@@ -250,47 +246,49 @@ X = vectorizer.fit_transform(processed_content)
 # print X
 
 print("\n\n------------SVM Start------------\n\n")
-#use SVMClassifier
-clf = RandomForestClassifier()
+# Use SVMClassifier
+clf = svm.SVC(kernel='linear')
+
 # fit train set
 clf.fit(X, y)
+
 # predict test set (here is the same as the train set)
 y_pred = clf.predict(X)
 
-print '\npredictions of test set (which is the same as the train set) are:'
-print y_pred
+print('\npredictions of test set (which is the same as the train set) are:')
+print(y_pred)
 
-#transform predictions to text
+# Transform predictions to text
 predicted_categories = le.inverse_transform(y_pred)
-print '\npredictions of test set in text form are:'
-print predicted_categories
+print('\npredictions of test set in text form are:')
+print(predicted_categories)
 
-#classification_report
-print '\nclassification report for these predictions is:'
-print classification_report(y, y_pred, target_names=list(le.classes_))
+# Classification_report
+print('\nclassification report for these predictions is:')
+print(classification_report(y, y_pred, target_names=list(le.classes_)))
 print("\n\n------------SVM End------------\n\n")
 
 print("\n\n------------KNN Start------------\n\n")
 
-#use KNNClassifier
+# Use KNNClassifier
 knn = KNeighborsClassifier(n_neighbors=1)
 
 # fit train set
-knn.fit(X , y)
+knn.fit(X, y)
 
-# predict test set (here is the same as the train set)
+# Predict test set (here is the same as the train set)
 y_pred = knn.predict(X)
 
-print '\npredictions of test set (which is the same as the train set) are:'
-print y_pred
+print('\npredictions of test set (which is the same as the train set) are:')
+print(y_pred)
 
-#transform predictions to text
+# Transform predictions to text
 predicted_categories = le.inverse_transform(y_pred)
-print '\npredictions of test set in text form are:'
-print predicted_categories
+print('\npredictions of test set in text form are:')
+print(predicted_categories)
 
-#classification_report
-print '\nclassification report for these predictions is:'
-print classification_report(y, y_pred, target_names=list(le.classes_))
+# Classification_report
+print('\nclassification report for these predictions is:')
+print(classification_report(y, y_pred, target_names=list(le.classes_)))
 
 print("\n\n------------KNN End------------\n\n")
