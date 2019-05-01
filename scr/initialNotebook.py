@@ -39,7 +39,6 @@ from nltk.corpus import stopwords
 # %matplotlib inline
 # endregion
 
-# region
 # For classification
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from sklearn.feature_extraction.text import CountVectorizer
@@ -50,7 +49,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
 from sklearn.model_selection import train_test_split, GridSearchCV
-# endregion
 
 # import my functions
 from myFunctions import *
