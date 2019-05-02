@@ -21,7 +21,8 @@ code below:
     #store to file
     wc.to_file('test_wordCloud4.png')
     ```
-- All visualizations like wordclouds, heatmaps etc should be generated one time as they need some time to be generated and present them at the notebook
+- All visualizations like wordclouds, heatmaps etc should be generated one time as they need some time to be generated 
+and present them at the notebook
 - 
 
 # Preprocessing
@@ -41,7 +42,12 @@ code below:
   - We need to use the correct train and test set 
   - BOW and tfIdf run them one time and then save the results at notebook as they will be the same all the time
   - We convert labels (positive,negative,neutral) into numbers but this may not be necessary
-    
+  - Check about max_features at vectorizers. Useful links: 
+    https://stackoverflow.com/questions/40731271/test-and-train-dataset-has-different-number-of-features?fbclid=IwAR2NKF1aCx4BRqZb4Hd04TrV8JZxDv3vsprlqwHpybOd13nXWzvL8XfZH88 
+    and https://stackoverflow.com/questions/46118910/scikit-learn-vectorizer-max-features?fbclid=IwAR2NKF1aCx4BRqZb4Hd04TrV8JZxDv3vsprlqwHpybOd13nXWzvL8XfZH88
+  - Maybe to make a plot to see what happens if we use numberOne < max_features < numberTwo  at vectorizers
+  - To make a pipeline like this one : https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html
+  
 # General
 
   - Organize step-by-step with comments, images etc at Jupyter Notebook
