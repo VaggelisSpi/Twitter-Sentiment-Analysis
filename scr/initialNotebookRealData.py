@@ -133,13 +133,12 @@ processed_content_test = [item[1] for item in processed_list_test]
 
 #train and test vectors should have the same number of features
 
-vectorizer = TfidfVectorizer(max_features=10000)
+vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(processed_content)
 print("X.shape is:")
 print(X.shape)
 
-vectorizerTest = TfidfVectorizer(max_features=10000)
-X_test = vectorizerTest.fit_transform(processed_content_test)
+X_test = vectorizer.transform(processed_content_test)
 print("X_test.shape is:")
 print(X_test.shape)
 # endregion
@@ -173,7 +172,7 @@ print(classification_report(y_test, y_pred, target_names=list(le.classes_)))
 # region
 
 # Use KNNClassifier
-knn = KNeighborsClassifier(n_neighbors=1)
+knn = KNeighborsClassifier(n_neighbors=5)
 
 # fit train set
 knn.fit(X, y)
