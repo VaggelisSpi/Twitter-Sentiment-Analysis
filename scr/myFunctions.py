@@ -191,9 +191,18 @@ def preprocess(df):
 
         filtered = [w for w in stems if w not in stopwords.words('english')]
 
-        processed_text = filtered[0]
-        for token in filtered[1:]:
-            processed_text = processed_text + ' ' + token
+        # print("filtered is:")
+        # print(filtered)
+
+        if not filtered: #list is empty
+            # print("List is empty")
+            processed_text = ''
+        else:
+            processed_text = filtered[0]
+            # print("processed_text is:")
+            # print(processed_text)
+            for token in filtered[1:]:
+                processed_text = processed_text + ' ' + token
 
         # print(processed_text)
         ret += [(index, processed_text)]
