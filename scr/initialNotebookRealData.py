@@ -178,7 +178,7 @@ knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X, y)
 
 # Predict test set (here is the same as the train set)
-y_pred = knn.predict(X)
+y_pred = knn.predict(X_test)
 
 # print('\npredictions of test set (which is the same as the train set) are:')
 # print(y_pred)
