@@ -39,6 +39,7 @@ and present them at the notebook
 # Vectorization / Classification
 
   - We need to implement word embeddings vectorization
+  - Maybe use  KeyedVectors for the word embeddings model
   - We need to use the correct train and test set 
   - BOW and tfIdf run them one time and then save the results at notebook as they will be the same all the time
   - We convert labels (positive,negative,neutral) into numbers but this may not be necessary
