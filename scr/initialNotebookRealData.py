@@ -209,8 +209,6 @@ for tweet in processed_content:
     processed_content_vec.append(final_tweet_vec)
 
 X = array(processed_content_vec)
-print("X.shape is:")
-print(X.shape)
 # endregion
 
 # Make the vectors for the test data
@@ -238,8 +236,6 @@ for tweet in processed_content_test:
     processed_content_test_vec.append(final_tweet_vec)
 
 X_test = array(processed_content_test_vec)
-print("X_test.shape is:")
-print(X_test.shape)
 # endregion
 
 # #### See theshapes of the data 
