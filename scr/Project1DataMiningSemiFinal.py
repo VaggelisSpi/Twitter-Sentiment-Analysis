@@ -31,7 +31,6 @@ from wordcloud import WordCloud
 from IPython.display import Image
 from PIL import Image as imgWordcloud
 import numpy as np
-import matplotlib.pyplot as plt
 
 # for preprocessing
 import re
@@ -53,9 +52,6 @@ trainData = pd.read_csv('../twitter_data/train2017.tsv', sep='\t', names=['ID_1'
 myAdditionalStopWords = [ ] #['said','say','just','it','says','It']
 stopWords = ENGLISH_STOP_WORDS.union(myAdditionalStopWords)
 
-# initiliaze wordcloud
-wc = WordCloud(width=600,height=600,background_color = 'white', stopwords = stopWords)
-
 # trainData # printToBeRemoved
 # endregion
 
@@ -67,7 +63,9 @@ wholeText = ''
 for tweetText in trainData['Text']:
     wholeText = wholeText + ' ' +  tweetText
 
-# wholeText # printToBeRemoved
+#wholeText # printToBeRemoved
+
+wc = WordCloud(width=600,height=600,background_color = 'white', stopwords = stopWords)
 
 wc.generate(wholeText)
 wc.to_file('wholeTextWordcloud.png')
@@ -102,8 +100,11 @@ def replaceEmojis(text):
 
 def preprocessText(initText):
 
+    # Decode unicode characters
+    processedText = initText.encode().decode('unicode-escape')
+
     # Make everything to lower case
-    processedText = initText.lower()
+    processedText = processedText.lower()
 
     # Remove urls
     processedText = re.sub(r'(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)'
@@ -181,7 +182,7 @@ wc.to_file('wholeTextCleanWordcloud.png')
 Image('wholeTextCleanWordcloud.png')
 # endregion
 
-# #### make content for each category of all tweets
+# #### Make content for each category of all tweets
 
 # region
 tweetCategories = list(set(trainData['Label']))

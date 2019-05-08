@@ -54,3 +54,4 @@ and present them at the notebook
   - Organize step-by-step with comments, images etc at Jupyter Notebook
   - When we don't need something anymore we "free" it from the memory as it may be big enough
   - Do some general tests (με το μάτι) so to check if all is OK. 
+  - Before final version remove all #printToBeRemoved
