@@ -37,6 +37,12 @@ import re
 from string import punctuation
 from nltk.stem import StemmerI, RegexpStemmer, LancasterStemmer, ISRIStemmer, PorterStemmer, SnowballStemmer, RSLPStemmer
 from nltk import word_tokenize
+
+# for classification
+from sklearn import svm, preprocessing
+from sklearn.metrics import classification_report,accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 # endregion
 
 # ## __Data Analysis__
@@ -98,10 +104,13 @@ def replaceEmojis(text):
 
     return processedText
 
-def preprocessText(initText):
+def preprocessText(initText, unicodeDecoding):
 
-    # Decode unicode characters
-    processedText = initText.encode().decode('unicode-escape')
+    if unicodeDecoding:
+        # Decode unicode characters
+        processedText = initText.encode().decode('unicode-escape')
+    else:
+        processedText = initText
 
     # Make everything to lower case
     processedText = processedText.lower()
@@ -153,7 +162,7 @@ def preprocessText(initText):
 # region
 for index, row in trainData.iterrows():
     initialText = row["Text"]
-    trainData.loc[index, "Text"] = preprocessText(initialText)
+    trainData.loc[index, "Text"] = preprocessText(initialText, True)
 
 # trainData # printToBeRemoved
 # endregion
@@ -246,4 +255,119 @@ wc.generate(contentDict['neutral'])
 wc.to_file('neutralWordcloud.png')
 
 Image('neutralWordcloud.png')
+# endregion
+
+# ___
+
+# ## __Classification__
+
+#   - #### Classification using SVM classifier
+
+def SvmClassification(trainX, trainY, testX, testY, labelEncoder):
+    clf = svm.SVC(kernel='linear')
+
+    # fit train set
+    clf.fit(trainX, trainY)
+
+    predY = clf.predict(testX)
+
+    # Classification_report
+    print(classification_report(testY, predY, target_names=list(labelEncoder.classes_)))
+
+    return accuracy_score(testY, predY)
+
+#   - #### Classification using KNN classifier
+
+def KnnClassification(trainX, trainY, testX, testY, labelEncoder):
+    knn = KNeighborsClassifier(n_neighbors=5)
+
+    # fit train set
+    knn.fit(trainX, trainY)
+
+    # Predict test set (here is the same as the train set)
+    predY = knn.predict(testX)
+
+    # Classification_report
+    print(classification_report(testY, predY, target_names=list(labelEncoder.classes_)))
+
+    return accuracy_score(testY, predY)
+
+# Prepare train and test data that we will need below
+
+# region
+# read test data
+testData = pd.read_csv('../twitter_data/test2017.tsv', sep='\t', names=['ID_1', 'ID_2', 'Label', 'Text'])
+
+# preprocess test data
+for index, row in testData.iterrows():
+    initialText = row["Text"]
+    trainData.loc[index, "Text"] = preprocessText(initialText, False)
+
+# read test results
+testResults = pd.read_csv('../twitter_data/SemEval2017_task4_subtaskA_test_english_gold.txt',
+                          sep='\t', names=['ID', 'Label'])
+
+# Build label encoder for categories
+le = preprocessing.LabelEncoder()
+le.fit(trainData["Label"])
+
+# Transform categories into numbers
+trainY = le.transform(trainData["Label"])
+testY = le.transform(testResults["Label"])
+
+accuracyDict = dict()
+# endregion
+
+# ## __Vectorization__
+
+# Let's do classification using 3 different ways of vectorization
+
+#   - #### Bag-of-words vectorization
+
+# region
+bowVectorizer = CountVectorizer(stop_words=stopWords)
+
+trainX = bowVectorizer.fit_transform(trainData['Text'])
+testX = bowVectorizer.transform(testData['Text'])
+
+print('-------------SVM Classification Report with BOW Vectorization-------------')
+accuracyDict["BOW-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
+
+print('-------------KNN Classification Report with BOW Vectorization-------------')
+accuracyDict["BOW-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
+# endregion
+
+#   - #### Tf-idf vectorization
+
+# region
+tfIdfVectorizer = TfidfVectorizer()
+
+trainX = tfIdfVectorizer.fit_transform(trainData['Text'])
+testX = tfIdfVectorizer.transform(testData['Text'])
+
+print('-------------SVM Classification Report with TfIdf Vectorization-------------')
+accuracyDict["TfIdf-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
+
+print('-------------KNN Classification Report with TfIdf Vectorization-------------')
+accuracyDict["TfIdf-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
+# endregion
+
+#   - #### Word embeddings vectorization
+
+# region
+accuracyDict["WordEmbed-SVM"] = 1.0
+
+accuracyDict["WordEmbed-KNN"] = 1.0
+# endregion
+
+# ## __Final Results__
+
+# region
+resultsData = {r'Vectorizer \ Classifier': ['BOW', 'Tfidf', 'Word Embeddings'],
+               'KNN': [accuracyDict["BOW-KNN"], accuracyDict["TfIdf-KNN"], accuracyDict["WordEmbed-KNN"]],
+               'SVM': [accuracyDict["BOW-SVM"], accuracyDict["TfIdf-SVM"], accuracyDict["WordEmbed-SVM"]]}
+
+resultsDataFrame = pd.DataFrame(data=resultsData)
+
+resultsDataFrame
 # endregion
