@@ -55,13 +55,14 @@ from operator import add
 
 # region
 # read train data
-trainData = pd.read_csv('../twitter_data/train2017.tsv', sep='\t', names=['ID_1', 'ID_2', 'Label', 'Text'])
+trainData = pd.read_csv('../twitter_data/train2017.tsv', sep='\t+', escapechar="\\",
+                        engine='python', names=['ID_1', 'ID_2', 'Label', 'Text'])
 # trainData = trainData[:5000] # printToBeRemoved
 
 # make stop words
 stopWords = ENGLISH_STOP_WORDS
 
-# trainData # printToBeRemoved
+trainData # printToBeRemoved
 # endregion
 
 #   - #### Wordcloud for all tweets
