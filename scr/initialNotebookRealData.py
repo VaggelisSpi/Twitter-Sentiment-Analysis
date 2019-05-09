@@ -33,7 +33,7 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from operator import add
 import random
-from numpy  import array
+from numpy import array
 
 # import enchant
 # import hunspell
@@ -67,7 +67,7 @@ df = pd.read_csv(Location, sep='\t', names=['ID_1', 'ID_2', 'Label', 'Text'])
 
 # region
 # use only a part of csv
-df = df[:10000]
+# df = df[:10000]
 # Preprocess the traindata
 processed_list = preprocess(df)
 
