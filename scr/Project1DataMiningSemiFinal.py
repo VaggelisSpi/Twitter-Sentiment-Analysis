@@ -10,9 +10,9 @@
 #       format_version: '1.4'
 #       jupytext_version: 1.1.1
 #   kernelspec:
-#     display_name: dm_kernel
+#     display_name: Python 3
 #     language: python
-#     name: dm_kernel
+#     name: python3
 # ---
 
 # # <center>Data Mining Project 1 Spring semester 2018-2019</center>
@@ -32,7 +32,7 @@ from IPython.display import Image
 from PIL import Image as imgWordcloud
 import numpy as np
 
-# for prepossessing
+# for preprocessing
 import re
 from string import punctuation
 from nltk.stem import StemmerI, RegexpStemmer, LancasterStemmer, ISRIStemmer, PorterStemmer, SnowballStemmer, RSLPStemmer
@@ -59,8 +59,7 @@ trainData = pd.read_csv('../twitter_data/train2017.tsv', sep='\t', names=['ID_1'
 # trainData = trainData[:5000] # printToBeRemoved
 
 # make stop words
-myAdditionalStopWords = []  # ['said','say','just','it','says','It']
-stopWords = ENGLISH_STOP_WORDS.union(myAdditionalStopWords)
+stopWords = ENGLISH_STOP_WORDS
 
 # trainData # printToBeRemoved
 # endregion
@@ -110,24 +109,11 @@ def replaceEmojis(text):
     return processedText
 
 
-def preprocessText(initText, unicodeDecoding):
+def preprocessText(initText):
 
-    # if unicodeDecoding:
-    #     # Decode unicode characters
-    #     processedText = initText.encode().decode('unicode-escape')
-    # else:
-    #     processedText = initText
-    
-    processedText = initText.replace("\u002c", ',')
-    processedText = processedText.replace("\u2019", '’')
-#     if '’' in punctuation:
-#         print("aa")
-#     processedText = initText
-#     if '\u' in initText:
-#         # Decode unicode characters
-#         processedText = initText.encode().decode('unicode-escape')
-#     else:
-#         processedText = initText
+    # Replace these characters as we saw in the first wordcloud that are not useful in this form
+    processedText = initText.replace("\\u002c", ',')
+    processedText = processedText.replace("\\u2019", '’')
 
     # Make everything to lower case
     processedText = processedText.lower()
@@ -178,20 +164,19 @@ def preprocessText(initText, unicodeDecoding):
 
 
 # region
+# In the first wordcloud we see that there are many words that are not included in stop words
+# So let's add our stop words
+myAdditionalStopWords = []  # ['said','say','just','it','says','It']
+stopWords = stopWords.union(myAdditionalStopWords)
+
 for index, row in trainData.iterrows():
     initialText = row["Text"]
-    trainData.loc[index, "Text"] = preprocessText(initialText, True)
+    trainData.loc[index, "Text"] = preprocessText(initialText)
 
-# text = trainData.Text[16729]
-# print(text)
-# text = preprocessText(trainData.Text[16729], True)
-# print(text)
 # trainData # printToBeRemoved
 # endregion
 
 # Let's make again a wordcloud for the text of all tweets
-
-trainData.shape[0]
 
 # region
 # make a text of all tweets
@@ -328,7 +313,7 @@ testData = pd.read_csv('../twitter_data/test2017.tsv', sep='\t', names=['ID_1', 
 # preprocess test data
 for index, row in testData.iterrows():
     initialText = row["Text"]
-    trainData.loc[index, "Text"] = preprocessText(initialText, False)
+    trainData.loc[index, "Text"] = preprocessText(initialText)
 
 # read test results
 testResults = pd.read_csv('../twitter_data/SemEval2017_task4_subtaskA_test_english_gold.txt',
@@ -381,13 +366,14 @@ accuracyDict["TfIdf-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
 
 #   - #### Word embeddings vectorization
 
-# Train the word embeddings model and save it. If the model is already trained and saved then you only have to load it as shown in the next cell
+# Train the word embeddings model and save it. If the model is already trained and saved then you only have to load
+# it as shown in the next cell
 
 # region
 # Word embeddings
 tokenize = lambda x: x.split()
 tokens = [tokenize(row["Text"]) for index, row in trainData.iterrows()]  # tokenizing
-# print(tokenized_tweet)
+# print(tokenized_tweet) # printToBeRemoved
 vec_size = 200
 model_w2v = gensim.models.Word2Vec(
             tokens,
@@ -410,7 +396,7 @@ model_w2v.save("word2vec.model")
 model_w2v = Word2Vec.load("word2vec.model")
 
 
-# Use the following fuction to vectorize the data using the word embeddings vectorizer
+# Use the following function to vectorize the data using the word embeddings vectorizer
 
 # region
 def sample_floats(low, high, k=1):
@@ -453,31 +439,15 @@ def wordEmbeddingsVectorizer(data):
     return np.array(text_vec)
 # endregion
 
-
+# region
 trainX = wordEmbeddingsVectorizer(trainData)
 testX = wordEmbeddingsVectorizer(testData)
-
-# print(trainX.shape)
-# print(testX.shape)
-# print(trainY)
-# print(testY)
-if 4 in testY[:]:
-    print("a")
-if 4 in trainY[:]:
-    print("b")
-print(list(le.classes_))
-print(list(le.inverse_transform([2, 2, 1])))
 
 print('-------------SVM Classification Report with Word Embeddings Vectorization-------------')
 accuracyDict["WordEmbed-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
 
 print('-------------KNN Classification Report with TfIdf Vectorization-------------')
 accuracyDict["WordEmbed-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
-
-# region
-accuracyDict["WordEmbed-SVM"] = 1.0
-
-accuracyDict["WordEmbed-KNN"] = 1.0
 # endregion
 
 # ## __Final Results__
