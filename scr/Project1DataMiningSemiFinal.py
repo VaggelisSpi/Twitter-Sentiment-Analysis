@@ -10,9 +10,9 @@
 #       format_version: '1.4'
 #       jupytext_version: 1.1.1
 #   kernelspec:
-#     display_name: dm_kernel
+#     display_name: Python 3
 #     language: python
-#     name: dm_kernel
+#     name: python3
 # ---
 
 # # <center>Data Mining Project 1 Spring semester 2018-2019</center>
@@ -112,8 +112,6 @@ def replaceEmojis(text):
 
 
 def preprocessText(initText):
-#     print(stopWords)
-
     # Replace these characters as we saw in the first wordcloud that are not useful in this form
     processedText = initText.replace("\\u002c", ',')
     processedText = processedText.replace("\\u2019", '\'')
@@ -149,13 +147,24 @@ def preprocessText(initText):
     tokens = word_tokenize(processedText)
 
     filtered = [w for w in tokens if w not in stopWords]
-    
-    stemmer = PorterStemmer()
-    stems = [stemmer.stem(token) for token in filtered]
-    
-    # filtered = [w for w in stems if w not in stopwords.words('english')]
 
     if not filtered:  # list is empty
+        processedText = ''
+    else:
+        processedText = filtered[0]
+        for word in filtered[1:]:
+            processedText = processedText + ' ' + word
+
+    return processedText
+
+def stemmingPreprocess(initText):
+    # Split to words
+    tokens = word_tokenize(initText)
+
+    stemmer = PorterStemmer()
+    stems = [stemmer.stem(token) for token in tokens]
+
+    if not stems:  # list is empty
         processedText = ''
     else:
         processedText = stems[0]
@@ -163,7 +172,6 @@ def preprocessText(initText):
             processedText = processedText + ' ' + stem
 
     return processedText
-
 # endregion
 
 
@@ -319,7 +327,7 @@ testData = pd.read_csv('../twitter_data/test2017.tsv', sep='\t', names=['ID_1', 
 # preprocess test data
 for index, row in testData.iterrows():
     initialText = row["Text"]
-    trainData.loc[index, "Text"] = preprocessText(initialText)
+    testData.loc[index, "Text"] = preprocessText(initialText)
 
 # read test results
 testResults = pd.read_csv('../twitter_data/SemEval2017_task4_subtaskA_test_english_gold.txt',
@@ -334,6 +342,17 @@ trainY = le.transform(trainData["Label"])
 testY = le.transform(testResults["Label"])
 
 accuracyDict = dict()
+
+# Let's do stemming
+for index, row in trainData.iterrows():
+    initialText = row["Text"]
+    trainData.loc[index, "Text"] = stemmingPreprocess(initialText)
+
+for index, row in testData.iterrows():
+    initialText = row["Text"]
+    testData.loc[index, "Text"] = stemmingPreprocess(initialText)
+    
+# trainData # printToBeRemoved
 # endregion
 
 # ## __Vectorization__
@@ -343,7 +362,7 @@ accuracyDict = dict()
 #   - #### Bag-of-words vectorization
 
 # region
-bowVectorizer = CountVectorizer(stop_words=stopWords, max_features=1000)
+bowVectorizer = CountVectorizer(max_features=1000)
 
 trainX = bowVectorizer.fit_transform(trainData['Text'])
 testX = bowVectorizer.transform(testData['Text'])
@@ -358,7 +377,7 @@ accuracyDict["BOW-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
 #   - #### Tf-idf vectorization
 
 # region
-tfIdfVectorizer = TfidfVectorizer()
+tfIdfVectorizer = TfidfVectorizer(max_features=1000)
 
 trainX = tfIdfVectorizer.fit_transform(trainData['Text'])
 testX = tfIdfVectorizer.transform(testData['Text'])
@@ -459,6 +478,8 @@ accuracyDict["WordEmbed-KNN"] = KnnClassification(trainX, trainY, testX, testY, 
 # ## __Final Results__
 
 # region
+accuracyDict["WordEmbed-KNN"] = 1.0 # to be removed
+accuracyDict["WordEmbed-SVM"] = 1.0 # to be removed
 resultsData = {r'Vectorizer \ Classifier': ['BOW', 'Tfidf', 'Word Embeddings'],
                'KNN': [accuracyDict["BOW-KNN"], accuracyDict["TfIdf-KNN"], accuracyDict["WordEmbed-KNN"]],
                'SVM': [accuracyDict["BOW-SVM"], accuracyDict["TfIdf-SVM"], accuracyDict["WordEmbed-SVM"]]}
