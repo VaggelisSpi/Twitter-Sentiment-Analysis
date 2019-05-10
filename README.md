@@ -31,7 +31,7 @@
   
 # General
 
-  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough (Pythin most likely does it on its own)
+  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough (Python most likely does it on its own)
   - Do some general tests (με το μάτι) so to check if all is OK. 
   - Before final version remove all #printToBeRemoved
   - Note that neutral tweets are difficult to be discovered
