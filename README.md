@@ -4,6 +4,7 @@
 - Heatmap based on lexica like this one https://docs.google.com/presentation/d/1C7U5vLUF38gbC5fHnAnEWsLgHLS9iEzR38S1pAKKhCs/edit#slide=id.g5070c672b6_0_11
 - Maybe bubbles https://www.google.com/search?q=data+visualization+bubbles&oq=visualization+bubbles+&aqs=chrome.1.69i57j0l2.6848j1j7&sourceid=chrome&ie=UTF-8 and https://docs.google.com/presentation/d/1C7U5vLUF38gbC5fHnAnEWsLgHLS9iEzR38S1pAKKhCs/edit#slide=id.g5070c672b6_0_5
 - Maybe some plots like tsne_lot like this one https://cdn-images-1.medium.com/max/800/1*9e_PVh0wGy99EwVPZtyDAg.png and url https://medium.com/@luckylwk/visualising-high-dimensional-datasets-using-pca-and-t-sne-in-python-8ef87e7915b
+- Maybe tsne
 
 # Preprocessing
 
@@ -31,7 +32,7 @@
   
 # General
 
-  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough (Pythin most likely does it on its own)
+  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough (Python most likely does it on its own)
   - Do some general tests (με το μάτι) so to check if all is OK. 
   - Before final version remove all #printToBeRemoved
   - Note that neutral tweets are difficult to be discovered
