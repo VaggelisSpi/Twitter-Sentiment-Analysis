@@ -18,7 +18,6 @@
 
 # Vectorization / Classification
 
-  - We need to implement word embeddings vectorization
   - Maybe use  KeyedVectors for the word embeddings model
   - Kolovou said max features should be between 1000 to 3000
   - Check about max_features at vectorizers. Useful links: 
@@ -32,7 +31,7 @@
   
 # General
 
-  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough
+  - (???) When we don't need something anymore we "free" it from the memory as it may be big enough (Pythin most likely does it on its own)
   - Do some general tests (με το μάτι) so to check if all is OK. 
   - Before final version remove all #printToBeRemoved
   - Note that neutral tweets are difficult to be discovered
