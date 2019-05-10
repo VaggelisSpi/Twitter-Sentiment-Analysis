@@ -10,9 +10,9 @@
 #       format_version: '1.4'
 #       jupytext_version: 1.1.1
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: dm_kernel
 #     language: python
-#     name: python3
+#     name: dm_kernel
 # ---
 
 # # <center>Data Mining Project 1 Spring semester 2018-2019</center>
@@ -37,6 +37,7 @@ import re
 from string import punctuation
 from nltk.stem import StemmerI, RegexpStemmer, LancasterStemmer, ISRIStemmer, PorterStemmer, SnowballStemmer, RSLPStemmer
 from nltk import word_tokenize
+from nltk.corpus import stopwords as nltkStopwords
 
 # for classification
 from sklearn import svm, preprocessing
@@ -62,7 +63,7 @@ trainData = pd.read_csv('../twitter_data/train2017.tsv', sep='\t+', escapechar="
 # make stop words
 stopWords = ENGLISH_STOP_WORDS
 
-trainData # printToBeRemoved
+# trainData # printToBeRemoved
 # endregion
 
 #   - #### Wordcloud for all tweets
@@ -111,10 +112,11 @@ def replaceEmojis(text):
 
 
 def preprocessText(initText):
+#     print(stopWords)
 
     # Replace these characters as we saw in the first wordcloud that are not useful in this form
     processedText = initText.replace("\\u002c", ',')
-    processedText = processedText.replace("\\u2019", '’')
+    processedText = processedText.replace("\\u2019", '\'')
 
     # Make everything to lower case
     processedText = processedText.lower()
@@ -146,18 +148,19 @@ def preprocessText(initText):
     # Split to words
     tokens = word_tokenize(processedText)
 
-    # stemmer = PorterStemmer()
-    # stems = [stemmer.stem(token) for token in tokens]
-    # filtered = [w for w in stems if w not in stopwords.words('english')]
-
     filtered = [w for w in tokens if w not in stopWords]
+    
+    stemmer = PorterStemmer()
+    stems = [stemmer.stem(token) for token in filtered]
+    
+    # filtered = [w for w in stems if w not in stopwords.words('english')]
 
     if not filtered:  # list is empty
         processedText = ''
     else:
-        processedText = filtered[0]
-        for token in filtered[1:]:
-            processedText = processedText + ' ' + token
+        processedText = stems[0]
+        for stem in stems[1:]:
+            processedText = processedText + ' ' + stem
 
     return processedText
 
@@ -167,8 +170,10 @@ def preprocessText(initText):
 # region
 # In the first wordcloud we see that there are many words that are not included in stop words
 # So let's add our stop words
-myAdditionalStopWords = []  # ['said','say','just','it','says','It']
-stopWords = stopWords.union(myAdditionalStopWords)
+myAdditionalStopWords = ['tomorrow', 'today', 'day', 'tonight', 'sunday',
+                         'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
+                         'saturday', 'week', 'just', 'going', 'time']
+stopWords = (stopWords.union(myAdditionalStopWords)).union(nltkStopwords.words('english'))
 
 for index, row in trainData.iterrows():
     initialText = row["Text"]
@@ -338,7 +343,7 @@ accuracyDict = dict()
 #   - #### Bag-of-words vectorization
 
 # region
-bowVectorizer = CountVectorizer(stop_words=stopWords)
+bowVectorizer = CountVectorizer(stop_words=stopWords, max_features=1000)
 
 trainX = bowVectorizer.fit_transform(trainData['Text'])
 testX = bowVectorizer.transform(testData['Text'])
@@ -373,7 +378,7 @@ accuracyDict["TfIdf-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
 # region
 # Word embeddings
 tokenize = lambda x: x.split()
-tokens = [tokenize(row["Text"]) for index, row in trainData.iterrows()]  # tokenizing
+tokens = [word_tokenize(row["Text"]) for index, row in trainData.iterrows()]  # tokenizing
 # print(tokenized_tweet) # printToBeRemoved
 vec_size = 200
 model_w2v = gensim.models.Word2Vec(
@@ -447,7 +452,7 @@ testX = wordEmbeddingsVectorizer(testData)
 print('-------------SVM Classification Report with Word Embeddings Vectorization-------------')
 accuracyDict["WordEmbed-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
 
-print('-------------KNN Classification Report with TfIdf Vectorization-------------')
+print('-------------KNN Classification Report with Word Embeddings Vectorization-------------')
 accuracyDict["WordEmbed-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
 # endregion
 
