@@ -10,9 +10,9 @@
 #       format_version: '1.4'
 #       jupytext_version: 1.1.1
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: dm_kernel
 #     language: python
-#     name: python3
+#     name: dm_kernel
 # ---
 
 # # <center>Data Mining Project 1 Spring semester 2018-2019</center>
@@ -441,7 +441,7 @@ for i, line in enumerate(f):
     embeddings_dict[word] = coefs
 
 vec_size = 200
-embeddings_dict # printToBeRemoved
+# embeddings_dict # printToBeRemoved
 # endregion
 
 # Use the following function to vectorize the data using the word embeddings vectorizer
@@ -513,6 +513,30 @@ def wordEmbeddingsPreTrainedVectorizer(data):
 
 trainX = wordEmbeddingsPreTrainedVectorizer(trainNotStemmed)
 trainX
+
+
+# Read the lexica
+
+def readDictionary(fileName):
+    print(fileName)
+    dict
+    dictFile = open(fileName, "r")
+    dictionary = dict()
+#     for line in file:
+#         words = line.split()
+#         text = ' '.join(words[:-1])
+#         dictionary[text] = float(words[-1])
+
+    return dictionary
+
+
+affinDict = readDictionary("../lexica/affin/affin.txt")
+# emotweetDict = readDictionary("../lexica/emotweet/valence_tweet.txt")
+# genericDict = readDictionary("../lexica/generic/generic.txt")
+# nrcDict = readDictionary("../lexica/nrc/val.txt")
+# nrctagDict = readDictionary("../lexica/nrctag/val.txt")
+
+# Calculate the value for each of the dictionaries
 
 # region
 # trainX = wordEmbeddingsVectorizer(trainData)
