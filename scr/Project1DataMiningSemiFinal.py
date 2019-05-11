@@ -180,7 +180,7 @@ def stemmingPreprocess(initText):
 # So let's add our stop words
 myAdditionalStopWords = ['tomorrow', 'today', 'day', 'tonight', 'sunday',
                          'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-                         'saturday', 'week', 'just', 'going', 'time']
+                         'saturday', 'week', 'just', 'going', 'time','say','said']
 stopWords = (stopWords.union(myAdditionalStopWords)).union(nltkStopwords.words('english'))
 
 for index, row in trainData.iterrows():
@@ -288,7 +288,7 @@ Image('neutralWordcloud.png')
 
 
 def SvmClassification(trainX, trainY, testX, testY, labelEncoder):
-    clf = svm.SVC(kernel='linear')
+    clf = svm.SVC(kernel='linear', C=1, probability=True)
 
     # fit train set
     clf.fit(trainX, trainY)
@@ -343,6 +343,9 @@ testY = le.transform(testResults["Label"])
 
 accuracyDict = dict()
 
+trainNotStemmed = trainData
+testNotStemmed = testData
+
 # Let's do stemming
 for index, row in trainData.iterrows():
     initialText = row["Text"]
@@ -357,12 +360,17 @@ for index, row in testData.iterrows():
 
 # ## __Vectorization__
 
+trainNotStemmed.to_csv("trainNotStemedSaved.csv")
+testNotStemmed.to_csv("testNotStemmedSaved.csv")
+trainData.to_csv("trainDataStemedSaved.csv")
+testData.to_csv("testDataStemedSaved.csv")
+
 # Let's do classification using 3 different ways of vectorization
 
 #   - #### Bag-of-words vectorization
 
 # region
-bowVectorizer = CountVectorizer(max_features=1000)
+bowVectorizer = CountVectorizer(max_features=3000)
 
 trainX = bowVectorizer.fit_transform(trainData['Text'])
 testX = bowVectorizer.transform(testData['Text'])
@@ -377,7 +385,7 @@ accuracyDict["BOW-KNN"] = KnnClassification(trainX, trainY, testX, testY, le)
 #   - #### Tf-idf vectorization
 
 # region
-tfIdfVectorizer = TfidfVectorizer(max_features=1000)
+tfIdfVectorizer = TfidfVectorizer(max_features=3000)
 
 trainX = tfIdfVectorizer.fit_transform(trainData['Text'])
 testX = tfIdfVectorizer.transform(testData['Text'])
@@ -420,6 +428,21 @@ model_w2v.save("word2vec.model")
 
 model_w2v = Word2Vec.load("word2vec.model")
 
+# Read pre-trained Word Embeddings
+
+# region
+embeddings_dict = {}
+f = open("datastories.twitter.200d.txt", "r", encoding="utf-8")
+for i, line in enumerate(f):
+    values = line.split()
+    word = values[0]
+    coefs = np.asarray(values[1:], dtype='float32')
+
+    embeddings_dict[word] = coefs
+
+vec_size = 200
+embeddings_dict # printToBeRemoved
+# endregion
 
 # Use the following function to vectorize the data using the word embeddings vectorizer
 
@@ -462,11 +485,41 @@ def wordEmbeddingsVectorizer(data):
         text_vec.append(final_tweet_vec)
 
     return np.array(text_vec)
+
+def wordEmbeddingsPreTrainedVectorizer(data):
+    text_vec = []
+    for index, row in data.iterrows():
+        text = row["Text"]
+        text_len = len(text)
+        if text_len == 0:
+            tweet_vec = sample_floats(-5.0, 5.0, vec_size)
+            text_vec.append(tweet_vec)
+            continue
+        tokens = word_tokenize(text)
+        if tokens[0] in embeddings_dict:
+            tweet_vec = embeddings_dict[tokens[0]]
+        else:
+            tweet_vec = sample_floats(-5.0, 5.0, vec_size)
+        for token in tokens[1:]:
+            if token in embeddings_dict:
+                tweet_vec = list(map(add, tweet_vec, embeddings_dict[token]))
+            else:
+                tweet_vec = list(map(add, tweet_vec, sample_floats(-5.0, 5.0, vec_size)))
+        final_tweet_vec = [i / text_len for i in tweet_vec]
+        text_vec.append(final_tweet_vec)
+
+    return np.array(text_vec)
 # endregion
 
+trainX = wordEmbeddingsPreTrainedVectorizer(trainNotStemmed)
+trainX
+
 # region
-trainX = wordEmbeddingsVectorizer(trainData)
-testX = wordEmbeddingsVectorizer(testData)
+# trainX = wordEmbeddingsVectorizer(trainData)
+# testX = wordEmbeddingsVectorizer(testData)
+
+trainX = wordEmbeddingsPreTrainedVectorizer(trainNotStemmed)
+testX = wordEmbeddingsPreTrainedVectorizer(testNotStemmed)
 
 print('-------------SVM Classification Report with Word Embeddings Vectorization-------------')
 accuracyDict["WordEmbed-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
@@ -477,9 +530,12 @@ accuracyDict["WordEmbed-KNN"] = KnnClassification(trainX, trainY, testX, testY, 
 
 # ## __Final Results__
 
+print(accuracyDict["WordEmbed-KNN"])
+print(accuracyDict["WordEmbed-SVM"])
+
 # region
-accuracyDict["WordEmbed-KNN"] = 1.0 # to be removed
-accuracyDict["WordEmbed-SVM"] = 1.0 # to be removed
+# accuracyDict["WordEmbed-KNN"] = 1.0 # to be removed
+# accuracyDict["WordEmbed-SVM"] = 1.0 # to be removed
 resultsData = {r'Vectorizer \ Classifier': ['BOW', 'Tfidf', 'Word Embeddings'],
                'KNN': [accuracyDict["BOW-KNN"], accuracyDict["TfIdf-KNN"], accuracyDict["WordEmbed-KNN"]],
                'SVM': [accuracyDict["BOW-SVM"], accuracyDict["TfIdf-SVM"], accuracyDict["WordEmbed-SVM"]]}
@@ -488,3 +544,14 @@ resultsDataFrame = pd.DataFrame(data=resultsData)
 
 resultsDataFrame
 # endregion
+
+# **Σχόλια και παρατηρήσεις**
+#   - Μετά απο διάφορους πειραματισμούς σχετικά με την παράμετρο max_features στο Bag Of Words και στο Tf Idf
+#   παρατηρήσαμε ότι για την τιμή max_features = 3000, τα αποτελέσματα που βγαίνουν είναι περίπου ίδια ή ακόμα και
+#   καλύτερα τόσο για τον classifier SVM όσο και για τον classifier KNN σε σύγκριση με το να ήταν το default που ορίζει
+#   top max_features.
+#   - Παρατηρούμε ότι ο classifier SVM είναι καλύτερος από τον classifier KNN.
+
+wordEmbeddingsPreTrainedVectorizer(trainNotStemmed[0:1])
+
+
