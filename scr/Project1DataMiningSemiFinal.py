@@ -647,6 +647,7 @@ resultsDataFrame
 #   καλύτερα τόσο για τον classifier SVM όσο και για τον classifier KNN σε σύγκριση με το να ήταν το default που ορίζει
 #   top max_features.
 #   - Παρατηρούμε ότι ο classifier SVM είναι καλύτερος από τον classifier KNN.
+#   - Επίσης μετά απο παραματισμούς στο preprocessing παρατηρήσαμε ότι αν κάνουμε stemming στα δεδομένα μας έχουμε μεγαλύτερα ποσοστά επιτυχίας από ότι χωρις
 
 wordEmbeddingsPreTrainedVectorizer(trainNotStemmed[0:1])
 
