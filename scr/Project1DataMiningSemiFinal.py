@@ -50,9 +50,13 @@ import random
 from operator import add
 # endregion
 
+# region {"toc-hr-collapsed": true, "cell_type": "markdown"}
 # ## __Data Analysis__
+# endregion
 
+# region {"toc-hr-collapsed": true, "cell_type": "markdown"}
 # - ### *Wordclouds*
+# endregion
 
 # region
 # read train data
@@ -282,7 +286,9 @@ Image('neutralWordcloud.png')
 
 # ___
 
+# region {"toc-hr-collapsed": true, "cell_type": "markdown"}
 # ## __Classification__
+# endregion
 
 #   - #### Classification using SVM classifier
 
@@ -518,32 +524,98 @@ trainX
 # Read the lexica
 
 def readDictionary(fileName):
-    print(fileName)
-    dict
     dictFile = open(fileName, "r")
     dictionary = dict()
-#     for line in file:
-#         words = line.split()
-#         text = ' '.join(words[:-1])
-#         dictionary[text] = float(words[-1])
+    for line in dictFile:
+        words = line.split()
+        text = ' '.join(words[:-1])
+        dictionary[text] = float(words[-1])
 
     return dictionary
 
 
+# For every tweet calculate the values of each dictionary and appnd them as extra features in the feature vector
+
+def getDictValues(data, vector):
+    extra_feats = []
+    for index, row in data.iterrows():
+        text = row["Text"]
+        
+        affinScore = 0.0
+        emotweetScore = 0.0
+        genericScore = 0.0
+        nrcScore = 0.0
+        nrctagScore = 0.0
+        
+        # Empty rows are not considered strings if read from a csv.
+        if not isinstance(text, basestring):
+            l = [affinScore, emotweetScore, genericScore, nrcScore, nrctagScore]
+            extra_feats.append(l)
+            continue
+                    
+        text_len = len(text)      
+        if text_len == 0:
+            l = [affinScore, emotweetScore, genericScore, nrcScore, nrctagScore]
+            extra_feats.append(l)
+            continue
+
+        tokens = word_tokenize(text)
+        if tokens == []:
+            continue
+
+        text_len = len(tokens)
+
+        for token in tokens:
+            if token in affinDict:
+                affinScore += affinDict[token]
+            if token in emotweetDict:
+                emotweetScore += emotweetDict[token]
+            if token in genericDict:
+                genericScore += genericDict[token]
+            if token in nrcDict:
+                nrcScore += nrcDict[token]
+            if token in nrctagDict:
+                nrctagScore += nrctagDict[token]
+        
+        affinScore /= text_len
+        emotweetScore /= text_len
+        genericScore /= text_len
+        nrcScore /= text_len
+        nrctagScore /= text_len
+        l = [affinScore, emotweetScore, genericScore, nrcScore, nrctagScore]
+        extra_feats.append(l)
+
+    return np.append(vector, np.array(extra_feats), axis=1)
+
+
+# Read the dictionary files and store them in python dictionaries
+
 affinDict = readDictionary("../lexica/affin/affin.txt")
-# emotweetDict = readDictionary("../lexica/emotweet/valence_tweet.txt")
-# genericDict = readDictionary("../lexica/generic/generic.txt")
-# nrcDict = readDictionary("../lexica/nrc/val.txt")
-# nrctagDict = readDictionary("../lexica/nrctag/val.txt")
+emotweetDict = readDictionary("../lexica/emotweet/valence_tweet.txt")
+genericDict = readDictionary("../lexica/generic/generic.txt")
+nrcDict = readDictionary("../lexica/nrc/val.txt")
+nrctagDict = readDictionary("../lexica/nrctag/val.txt")
 
 # Calculate the value for each of the dictionaries
+
+# region
+# trainData = pd.read_csv("trainDataStemedSaved.csv", names=['ID_1', 'ID_2', 'Label', 'Text'], dtype={'Text': str})
+
+# trainX = getDictValues(trainData,trainX)
+# print(trainX.shape)
+# print(trainX)
+# endregion
+
+# Vectorize the content using word embeddings vectorize. Then add some extra features using the dictionary files
 
 # region
 # trainX = wordEmbeddingsVectorizer(trainData)
 # testX = wordEmbeddingsVectorizer(testData)
 
 trainX = wordEmbeddingsPreTrainedVectorizer(trainNotStemmed)
+trainX = getDictValues(trainNotStemmed, trainX)
 testX = wordEmbeddingsPreTrainedVectorizer(testNotStemmed)
+trainX = getDictValues(testNotStemmed, testX)
 
 print('-------------SVM Classification Report with Word Embeddings Vectorization-------------')
 accuracyDict["WordEmbed-SVM"] = SvmClassification(trainX, trainY, testX, testY, le)
