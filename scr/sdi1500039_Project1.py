@@ -418,14 +418,14 @@ model_w2v = Word2Vec.load("word2vec.model")
 # region
 embeddings_dict = {}
 
-f = open("datastories.twitter.50d.txt", "r", encoding="utf-8")
-vec_size = 50
+# f = open("datastories.twitter.50d.txt", "r", encoding="utf-8")
+# vec_size = 50
 
 # f = open("datastories.twitter.200d.txt", "r", encoding="utf-8")
 # vec_size = 200
 
-# f = open("datastories.twitter.300d.txt", "r", encoding="utf-8")
-# vec_size = 300
+f = open("datastories.twitter.300d.txt", "r", encoding="utf-8")
+vec_size = 300
 
 for i, line in enumerate(f):
     values = line.split()
@@ -688,13 +688,3 @@ resultsDataFrame
 #   μετά από το filtering είναι κενό.
 #   - Προκειμένου να ξανατρέξει το notebook από την αρχή θα πρέπει να μπουν με το χέρι τα σωστά μονοπάτια για όσα αρχεία
 #   χρειάζονται.
-
-accuracyDict["WordEmbed-SVM-without-lexica"]
-
-accuracyDict["WordEmbed-KNN-without-lexica"]
-
-accuracyDict["WordEmbed-SVM-with-lexica"]
-
-accuracyDict["WordEmbed-KNN-with-lexica"]
-
-
