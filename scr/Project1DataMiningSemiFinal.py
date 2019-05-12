@@ -298,7 +298,8 @@ def SvmClassification(trainX, trainY, testX, testY, labelEncoder):
 
     # fit train set
     clf.fit(trainX, trainY)
-
+    
+    # Predict test set
     predY = clf.predict(testX)
 
     # Classification_report
@@ -315,7 +316,7 @@ def KnnClassification(trainX, trainY, testX, testY, labelEncoder):
     # fit train set
     knn.fit(trainX, trainY)
 
-    # Predict test set (here is the same as the train set)
+    # Predict test set
     predY = knn.predict(testX)
 
     # Classification_report
@@ -365,6 +366,8 @@ for index, row in testData.iterrows():
 # endregion
 
 # ## __Vectorization__
+
+# Save the preprocessed data to csv files so we can load them immediately and won't need to do all the preprocessing from the begining
 
 trainNotStemmed.to_csv("trainNotStemedSaved.csv")
 testNotStemmed.to_csv("testNotStemmedSaved.csv")
@@ -453,7 +456,7 @@ vec_size = 200
 # Use the following function to vectorize the data using the word embeddings vectorizer
 
 # region
-def sample_floats(low, high, k=1):
+def sample_floats(low=-1.0, high=1.0, k=1):
     """ Return a k-length list of unique random floats
         in the range of low <= x <= high
     """
@@ -469,6 +472,9 @@ def sample_floats(low, high, k=1):
 
 
 def wordEmbeddingsVectorizer(data):
+    """
+    Vectorize the data based on the model we trained ourselves.
+    """
     text_vec = []
     for index, row in data.iterrows():
         text = row["Text"]
@@ -493,10 +499,14 @@ def wordEmbeddingsVectorizer(data):
     return np.array(text_vec)
 
 def wordEmbeddingsPreTrainedVectorizer(data):
+    """
+    Vectorize the data based on a pretrained model we downloaded.
+    """
     text_vec = []
     for index, row in data.iterrows():
         text = row["Text"]
         text_len = len(text)
+        # If the text is empty make a random vector         
         if text_len == 0:
             tweet_vec = sample_floats(-5.0, 5.0, vec_size)
             text_vec.append(tweet_vec)
@@ -505,12 +515,13 @@ def wordEmbeddingsPreTrainedVectorizer(data):
         if tokens[0] in embeddings_dict:
             tweet_vec = embeddings_dict[tokens[0]]
         else:
-            tweet_vec = sample_floats(-5.0, 5.0, vec_size)
+            tweet_vec = sample_floats(-5.0, 5.0, vec_size)  # make a random vector if the word is not in the model 
         for token in tokens[1:]:
             if token in embeddings_dict:
                 tweet_vec = list(map(add, tweet_vec, embeddings_dict[token]))
             else:
-                tweet_vec = list(map(add, tweet_vec, sample_floats(-5.0, 5.0, vec_size)))
+                # make a random vector if the word is not in the model
+                tweet_vec = list(map(add, tweet_vec, sample_floats(-5.0, 5.0, vec_size))) 
         final_tweet_vec = [i / text_len for i in tweet_vec]
         text_vec.append(final_tweet_vec)
 
@@ -534,7 +545,7 @@ def readDictionary(fileName):
     return dictionary
 
 
-# For every tweet calculate the values of each dictionary and appnd them as extra features in the feature vector
+# For every tweet calculate the values of each dictionary and append them as extra features in the feature vector
 
 def getDictValues(data, vector):
     extra_feats = []
@@ -553,14 +564,17 @@ def getDictValues(data, vector):
             extra_feats.append(l)
             continue
                     
-        text_len = len(text)      
+        text_len = len(text)
+        # If the tweet is empty after preprocessing add  zeroes         
         if text_len == 0:
             l = [affinScore, emotweetScore, genericScore, nrcScore, nrctagScore]
             extra_feats.append(l)
             continue
 
         tokens = word_tokenize(text)
+        # If the tweet is empty after preprocessing add  zeroes
         if tokens == []:
+            extra_feats.append(l)
             continue
 
         text_len = len(tokens)
@@ -599,6 +613,8 @@ nrctagDict = readDictionary("../lexica/nrctag/val.txt")
 # Calculate the value for each of the dictionaries
 
 # region
+# Cell to be removed
+
 # trainData = pd.read_csv("trainDataStemedSaved.csv", names=['ID_1', 'ID_2', 'Label', 'Text'], dtype={'Text': str})
 
 # trainX = getDictValues(trainData,trainX)
@@ -645,9 +661,11 @@ resultsDataFrame
 #   - Μετά απο διάφορους πειραματισμούς σχετικά με την παράμετρο max_features στο Bag Of Words και στο Tf Idf
 #   παρατηρήσαμε ότι για την τιμή max_features = 3000, τα αποτελέσματα που βγαίνουν είναι περίπου ίδια ή ακόμα και
 #   καλύτερα τόσο για τον classifier SVM όσο και για τον classifier KNN σε σύγκριση με το να ήταν το default που ορίζει
-#   top max_features.
+#   top max_features ή με άλλες τιμές που δοκιμάσαμε εμείς.
 #   - Παρατηρούμε ότι ο classifier SVM είναι καλύτερος από τον classifier KNN.
-#   - Επίσης μετά απο παραματισμούς στο preprocessing παρατηρήσαμε ότι αν κάνουμε stemming στα δεδομένα μας έχουμε μεγαλύτερα ποσοστά επιτυχίας από ότι χωρις
+#   - Επίσης μετά απο παραματισμούς στο preprocessing παρατηρήσαμε ότι αν κάνουμε stemming στα δεδομένα μας έχουμε μεγαλύτερα ποσοστά επιτυχίας στο vectorization με BOW και TD-IDF από ότι χωρίς.
+#   - Στο vectorization με word embeddings αποφασίσαμε να μην χρησιμοποιήσουμε stemming γιατί χρησιμοποιούμε λεξικά, στα οποία οι λέξεις έχουν την κανονική τους μορφή
+#   - Δοκιμάσαμε να φτίαξουμε ένα δικό μας word embeddings μόντελο όπως και κάποιο έτοιμο. Τελικά το έτοιμο μοντέλο έχει καλύτερα αποτελέσματα και για αυτό χρησιμοποιήσαμε αυτό
 
 wordEmbeddingsPreTrainedVectorizer(trainNotStemmed[0:1])
 
