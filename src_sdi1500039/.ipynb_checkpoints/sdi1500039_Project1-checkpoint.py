@@ -418,14 +418,24 @@ model_w2v = Word2Vec.load("word2vec.model")
 # region
 embeddings_dict = {}
 
+<<<<<<< HEAD:src_sdi1500039/.ipynb_checkpoints/sdi1500039_Project1-checkpoint.py
 # f = open("datastories.twitter.50d.txt", "r", encoding="utf-8")
 # vec_size = 50
+=======
+f = open("datastories.twitter.50d.txt", "r", encoding="utf-8")
+vec_size = 50
+>>>>>>> ccf0d544a66034b36f7d03ef89477e4b56d77d63:scr/Project1DataMiningSemiFinal.py
 
 # f = open("datastories.twitter.200d.txt", "r", encoding="utf-8")
 # vec_size = 200
 
+<<<<<<< HEAD:src_sdi1500039/.ipynb_checkpoints/sdi1500039_Project1-checkpoint.py
 f = open("datastories.twitter.300d.txt", "r", encoding="utf-8")
 vec_size = 300
+=======
+# f = open("datastories.twitter.300d.txt", "r", encoding="utf-8")
+# vec_size = 300
+>>>>>>> ccf0d544a66034b36f7d03ef89477e4b56d77d63:scr/Project1DataMiningSemiFinal.py
 
 for i, line in enumerate(f):
     values = line.split()
@@ -688,3 +698,16 @@ resultsDataFrame
 #   μετά από το filtering είναι κενό.
 #   - Προκειμένου να ξανατρέξει το notebook από την αρχή θα πρέπει να μπουν με το χέρι τα σωστά μονοπάτια για όσα αρχεία
 #   χρειάζονται.
+<<<<<<< HEAD:src_sdi1500039/.ipynb_checkpoints/sdi1500039_Project1-checkpoint.py
+=======
+
+accuracyDict["WordEmbed-SVM-without-lexica"]
+
+accuracyDict["WordEmbed-KNN-without-lexica"]
+
+accuracyDict["WordEmbed-SVM-with-lexica"]
+
+accuracyDict["WordEmbed-KNN-with-lexica"]
+
+
+>>>>>>> ccf0d544a66034b36f7d03ef89477e4b56d77d63:scr/Project1DataMiningSemiFinal.py

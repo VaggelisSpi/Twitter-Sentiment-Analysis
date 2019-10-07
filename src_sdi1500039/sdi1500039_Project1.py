@@ -15,7 +15,7 @@
 # ---
 
 # # <center>Data Mining Project 1 Spring semester 2018-2019</center>
-# ## <center>Panayiotis Evangelliou/center>
+# ## <center>Panayiotis Evangelliou</center>
 # ## <center>Vaggelis Spithas</center>
 
 # ___
