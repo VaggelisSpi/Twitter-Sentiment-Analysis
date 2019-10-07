@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="62a4d936-f292-4bb7-afd8-99b3fba70625" name="Default Changelist" comment="Changed random forests to svm">
+      <change beforePath="$PROJECT_DIR$/lexica/affin/affin.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lexica/affin/affin.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../Thesis/scr/starter.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>processed_content_vec</find>
+      <find>u002c</find>
+      <find>u002</find>
+      <find>Did they play `` the bucket '' ????</find>
+      <find>yupz</find>
+      <find>``</find>
+      <find>HEAD</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/twitter_data/myTrain.tsv" />
+        <option value="$PROJECT_DIR$/../../signal_test.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/scr/__init__.py" />
+        <option value="$PROJECT_DIR$/scr/initialNotebookRealData.ipynb" />
+        <option value="$PROJECT_DIR$/scr/myFunctions.py" />
+        <option value="$PROJECT_DIR$/scr/initialNotebookRealData.py" />
+        <option value="$PROJECT_DIR$/twitter_data/train2017.tsv" />
+        <option value="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.ipynb" />
+        <option value="$PROJECT_DIR$/scr/name.py" />
+        <option value="$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.py" />
+        <option value="$PROJECT_DIR$/scr/lexicaSomething.py" />
+        <option value="$PROJECT_DIR$/scr/starter.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/DataMiningProject.iml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="63" />
+    <option name="y" value="27" />
+    <option name="width" value="809" />
+    <option name="height" value="1023" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Thesis/scr/starter.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="62a4d936-f292-4bb7-afd8-99b3fba70625" name="Default Changelist" comment="" />
+      <created>1555255841141</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1555255841141</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Made most of the prepossessing I believe.">
+      <created>1555526460252</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1555526460252</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changed random forests to svm">
+      <created>1556269919702</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556269919702</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="63" y="27" width="1617" height="1023" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.082810536" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295711" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49843064" visible="true" weight="0.23111612" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015694" side_tool="true" weight="0.24943566" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32919955" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Made most of the prepossessing I believe." />
+    <MESSAGE value="Changed random forests to svm" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed random forests to svm" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/scr/signal_test" />
+    <entry file="file://$PROJECT_DIR$/../../signal_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="44" lean-forward="true" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore" />
+    <entry file="file://$PROJECT_DIR$/scr/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1677">
+          <caret line="266" column="32" selection-start-line="266" selection-start-column="32" selection-end-line="266" selection-end-column="32" />
+          <folding>
+            <element signature="e#89#120#0" expanded="true" />
+            <element signature="e#1107#2803#0" />
+            <element signature="e#2866#3614#0" />
+            <element signature="e#3643#4096#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter_data/myTrain.tsv">
+      <provider editor-type-id="text-editor">
+        <state>
+          <caret column="53" selection-start-column="53" selection-end-column="53" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state>
+          <caret column="95" selection-start-column="95" selection-end-column="95" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="703">
+            <caret line="37" selection-start-line="37" selection-end-line="37" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/initialNotebookRealData.ipynb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/initialNotebookRealData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter_data/test2017.tsv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="193">
+          <caret line="21" column="76" selection-start-line="21" selection-start-column="76" selection-end-line="21" selection-end-column="76" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter_data/train2017.tsv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="223">
+          <caret line="16829" lean-forward="true" selection-start-line="16829" selection-end-line="16829" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/myFunctions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="191" column="52" selection-start-line="191" selection-start-column="52" selection-end-line="191" selection-end-column="52" />
+          <folding>
+            <element signature="e#89#120#0" expanded="true" />
+            <element signature="e#1107#2803#0" />
+            <element signature="e#2866#3614#0" />
+            <element signature="e#3643#4096#0" />
+            <element signature="e#4129#5217#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/word2vec.model">
+      <provider selected="true" editor-type-id="LargeFileEditor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.ipynb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3049">
+          <caret line="422" column="17234" selection-start-line="422" selection-start-column="17234" selection-end-line="422" selection-end-column="17234" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/name.py" />
+    <entry file="file://$PROJECT_DIR$/scr/Project1DataMiningSemiFinal.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="527" column="29" lean-forward="true" selection-start-line="527" selection-start-column="29" selection-end-line="527" selection-end-column="29" />
+          <folding>
+            <element signature="e#659#721#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/lexicaSomething.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/starter.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Thesis/scr/starter.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+</project>
