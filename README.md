@@ -1,4 +1,4 @@
-# DataMiningProject
+# Twitter-Sentiment-Analysis
 
 Course project for the Data Mining course of the Departement of Informatics of the National and Kapodistrian University.
 
